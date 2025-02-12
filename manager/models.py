@@ -30,3 +30,6 @@ class Task(models.Model):
     priority = models.IntegerField(default=0)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(Worker, related_name="workers")
+
+    def __str__(self):
+        return self.name
