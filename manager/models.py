@@ -29,4 +29,4 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
-    assignees = models.ManyToManyField(Worker)
+    assignees = models.ManyToManyField(Worker, related_name="workers")
