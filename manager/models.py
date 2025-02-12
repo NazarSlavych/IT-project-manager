@@ -20,3 +20,13 @@ class TaskType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Task(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    deadline = models.DateField()
+    is_completed = models.BooleanField(default=False)
+    priority = models.IntegerField(default=0)
+    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(Worker)
