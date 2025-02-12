@@ -13,3 +13,10 @@ class Worker(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class TaskType(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
