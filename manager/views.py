@@ -22,6 +22,10 @@ class TaskListView(generic.ListView):
     template_name = "manager/task_list.html"
 
 
+class TaskDetailView(generic.DetailView):
+    model = Task
+
+
 class WorkersListView(generic.ListView):
     model = Worker
     context_object_name = "workers_list"
