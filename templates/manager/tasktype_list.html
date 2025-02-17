@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Task type list</h1>
+    {% if tasktype_list %}
+      <ul class="list-group">
+        {% for task in tasktype_list %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ task.name }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="alert alert-warning" role="alert">
+        There are no types at the moment.
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

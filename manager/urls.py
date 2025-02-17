@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import index, TaskListView, WorkersListView, TaskDetailView, WorkerDetailView, PositionsListView
+from .views import index, TaskListView, WorkersListView, TaskDetailView, WorkerDetailView, PositionsListView, \
+    TaskTypeListView
 
 urlpatterns = [
     path("", index, name="index"),
@@ -9,6 +10,7 @@ urlpatterns = [
     path("workers", WorkersListView.as_view(), name="workers"),
     path("workers/<int:pk>", WorkerDetailView.as_view(), name="worker-detail"),
     path("positions", PositionsListView.as_view(), name="positions"),
+    path("tasktype", TaskTypeListView.as_view(), name="task-type"),
 ]
 
 
