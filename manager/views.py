@@ -1,7 +1,7 @@
 from django.db.models import Count
 from django.shortcuts import render
 from django.views import generic
-from manager.models import Task, Worker
+from manager.models import Task, Worker, Position
 
 
 def index(request):
@@ -19,7 +19,6 @@ def index(request):
 class TaskListView(generic.ListView):
     model = Task
     context_object_name = "task_list"
-    template_name = "manager/task_list.html"
 
 
 class TaskDetailView(generic.DetailView):
@@ -34,3 +33,7 @@ class WorkersListView(generic.ListView):
 
 class WorkerDetailView(generic.DetailView):
     model = Worker
+
+
+class PositionsListView(generic.ListView):
+    model = Position

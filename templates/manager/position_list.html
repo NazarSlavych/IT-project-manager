@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Positions List</h1>
+    {% if position_list %}
+      <ul class="list-group">
+        {% for position in position_list %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ position.name }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="alert alert-warning" role="alert">
+        There are no positions at the moment.
+      </div>п
+    {% endif %}
+  </div>
+{% endblock %}
