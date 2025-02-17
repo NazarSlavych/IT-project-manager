@@ -14,7 +14,7 @@
       </tr>
       {% for task in task_list %}
         <tr>
-          <td>{{ task.id }}</td>
+          <td><a href="{% url "manager:task-detail" pk=task.id %} ">{{ task.id }}</a></td>
           <td>{{ task.name }}</td>
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>
