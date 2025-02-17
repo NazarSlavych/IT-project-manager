@@ -30,3 +30,7 @@ class WorkersListView(generic.ListView):
     model = Worker
     context_object_name = "workers_list"
     template_name = "manager/workers_list.html"
+
+
+class WorkerDetailView(generic.DetailView):
+    model = Worker
