@@ -1,6 +1,6 @@
 from django.db.models import Count
 from django.shortcuts import render
-
+from django.views import generic
 from manager.models import Task, Worker
 
 
@@ -14,3 +14,9 @@ def index(request):
         "num_free_workers": num_free_workers,
     }
     return render(request, "manager/index.html", context)
+
+
+class TaskListView(generic.ListView):
+    model = Task
+    context_object_name = "task_list"
+    template_name = "manager/task_list.html"
