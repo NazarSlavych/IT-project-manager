@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>
+  Tasks list
+  </h1>
+  {% if task_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Priority</th>
+        <th>Task type</th>
+      </tr>
+      {% for task in task_list %}
+        <tr>
+          <td>{{ task.id }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.deadline }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.task_type }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no tasks at that moment.</p>
+  {% endif %}
+{% endblock %}
