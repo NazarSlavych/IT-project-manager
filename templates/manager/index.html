@@ -1,1 +1,13 @@
-HELLO
+{% extends "base.html" %}
+{% block content %}
+  <h1>Home page</h1>
+  <p>Welcome "user"!</p>
+  <p>Your task is bla bla bla</p>
+  <h2>Dynamic content</h2>
+  <p>At this moment we have:</p>
+  <ul>
+    <li><strong>Task</strong> {{ num_task }} </li>
+    <li><strong>Workers</strong> {{ num_worker }} </li>
+    <li><strong>Free workers</strong> {{ num_free_workers }} </li>
+  </ul>
+{% endblock %}
