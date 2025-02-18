@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 
 from manager.models import Worker, Task
 
@@ -28,3 +27,21 @@ class TaskForm(forms.ModelForm):
         widgets = {
             "assignees": forms.CheckboxSelectMultiple(),
         }
+
+
+class TaskSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
+    )
+
+
+class WorkerSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by username.."})
+    )

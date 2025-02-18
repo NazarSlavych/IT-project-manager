@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm
+from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm, WorkerSearchForm, TaskSearchForm
 from manager.models import Task, Worker, Position, TaskType
 
 
@@ -22,9 +22,25 @@ def index(request):
     return render(request, "manager/index.html", context)
 
 
-class TaskListView(LoginRequiredMixin ,generic.ListView):
+class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     context_object_name = "task_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Task.objects.select_related("task_type")
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+        return context
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -50,6 +66,23 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     context_object_name = "workers_list"
     template_name = "manager/workers_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Worker.objects.select_related("position")
+        username = self.request.GET.get("username")
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerSearchForm(
+            initial={"username": username}
+        )
+        return context
+
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
