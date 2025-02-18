@@ -25,6 +25,7 @@ def index(request):
 class TaskListView(LoginRequiredMixin ,generic.ListView):
     model = Task
     context_object_name = "task_list"
+    queryset = Task.objects.select_related("task_type")
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -50,6 +51,7 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     context_object_name = "workers_list"
     template_name = "manager/workers_list.html"
+    queryset = Worker.objects.select_related("position")
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
