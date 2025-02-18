@@ -3,6 +3,12 @@
 {% block content %}
   <h1>
     {{ worker.username }}
+    <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+    <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page">
+      Update worker
+    </a>
   </h1>
 
   <hr>
