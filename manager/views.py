@@ -26,6 +26,7 @@ class TaskListView(LoginRequiredMixin ,generic.ListView):
     model = Task
     context_object_name = "task_list"
     queryset = Task.objects.select_related("task_type")
+    paginate_by = 5
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -52,6 +53,7 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "workers_list"
     template_name = "manager/workers_list.html"
     queryset = Worker.objects.select_related("position")
+    paginate_by = 5
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
