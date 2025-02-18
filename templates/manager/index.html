@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Home page</h1>
-  <p>Welcome "user"!</p>
-  <p>Your task is bla bla bla</p>
-  <h2>Dynamic content</h2>
+  <p>Welcome {{ user.get_username }}!</p>
+  <h3>Your Tasks</h3>
+  {% if user.workers.all %}
+    <ul>
+      {% for task in user.workers.all %}
+        <li>
+          <a href="/tasks/{{ task.id }}">{{ task.name }}</a> - {{ task.description }} (Deadline: {{ task.deadline }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no tasks assigned.</p>
+  {% endif %}
+
+  <h3>Dynamic content</h3>
   <p>At this moment we have:</p>
   <ul>
     <li><strong>Task</strong> {{ num_task }} </li>

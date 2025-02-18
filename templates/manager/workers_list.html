@@ -2,6 +2,9 @@
 {% block content %}
   <h1>
   Workers list
+    <a href="{% url 'manager:worker-create' %}" class="btn btn-primary link-to-page">
+        Create
+    </a>
   </h1>
   {% if workers_list %}
     <table class="table">
@@ -14,7 +17,7 @@
       </tr>
       {% for worker in workers_list %}
         <tr>
-          <td>{{ worker.id }}</td>
+          <td><a href="{% url "manager:worker-detail" pk=worker.id %} ">{{ worker.id }}</a></td>
           <td>{{ worker.position }}</td>
           <td>{{ worker.username }}</td>
           <td>{{ worker.first_name }}</td>

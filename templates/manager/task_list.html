@@ -2,6 +2,9 @@
 {% block content %}
   <h1>
   Tasks list
+    <a href="{% url 'manager:task-create' %}" class="btn btn-primary link-to-page">
+        Create
+    </a>
   </h1>
   {% if task_list %}
     <table class="table">
@@ -14,7 +17,7 @@
       </tr>
       {% for task in task_list %}
         <tr>
-          <td>{{ task.id }}</td>
+          <td><a href="{% url "manager:task-detail" pk=task.id %} ">{{ task.id }}</a></td>
           <td>{{ task.name }}</td>
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>
