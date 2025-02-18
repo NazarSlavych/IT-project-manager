@@ -3,6 +3,12 @@
 {% block content %}
   <h1>
     {{ task.name }}
+    <a href="{% url 'manager:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">
+      Update worker
+    </a>
+    <a href="{% url 'manager:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
   </h1>
   
   <p><strong>Description:</strong> {{ task.description }} </p>
