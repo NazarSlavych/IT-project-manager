@@ -19,6 +19,7 @@
         <th>Deadline</th>
         <th>Priority</th>
         <th>Task type</th>
+        <th>Project</th>
       </tr>
       {% for task in task_list %}
         <tr>
@@ -27,6 +28,7 @@
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>
           <td>{{ task.task_type }}</td>
+          <td>{{ task.project }}</td>
         </tr>
       {% endfor %}
     </table>

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm, WorkerSearchForm, TaskSearchForm
-from manager.models import Task, Worker, Position, TaskType
+from manager.models import Task, Worker, Position, TaskType, Project, Team
 
 
 @login_required
@@ -14,10 +14,14 @@ def index(request):
     num_task = Task.objects.count()
     num_worker = Worker.objects.count()
     num_free_workers = Worker.objects.annotate(task_count=Count("workers")).filter(task_count=0).count()
+    num_project = Project.objects.count()
+    num_teams = Team.objects.count()
     context = {
         "num_task": num_task,
         "num_worker": num_worker,
         "num_free_workers": num_free_workers,
+        "num_project": num_project,
+        "num_teams": num_teams,
     }
     return render(request, "manager/index.html", context)
 
@@ -41,6 +45,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             initial={"name": name}
         )
         return context
+
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -112,3 +117,59 @@ class PositionsListView(LoginRequiredMixin, generic.ListView):
 
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     model = TaskType
+
+
+class ProjectListView(LoginRequiredMixin, generic.ListView):
+    model = Project
+
+
+class ProjectDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tasks"] = self.object.task_set.all()
+        return context
+
+
+class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Project
+    fields = "__all__"
+
+
+class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Project
+    fields = "__all__"
+
+
+class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Project
+    success_url = reverse_lazy("manager:projects")
+
+
+class TeamListView(LoginRequiredMixin, generic.ListView):
+    model = Team
+
+
+class TeamDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Team
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["projects"] = self.object.project_set.all()
+        return context
+
+
+class TeamCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Team
+    fields = "__all__"
+
+
+class TeamUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Team
+    fields = "__all__"
+
+
+class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Team
+    success_url = reverse_lazy("manager:teams")
