@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -27,6 +29,12 @@ class TaskForm(forms.ModelForm):
         widgets = {
             "assignees": forms.CheckboxSelectMultiple(),
         }
+
+    def clean_deadline(self):
+        deadline = self.cleaned_data["deadline"]
+        if deadline < datetime.date.today():
+            raise forms.ValidationError("Deadline must be in the future")
+        return deadline
 
 
 class TaskSearchForm(forms.Form):
