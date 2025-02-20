@@ -63,6 +63,16 @@ class ProjectSearchForm(forms.Form):
         widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
     )
 
+
+class TeamSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
+    )
+
+
 class TeamForm(forms.ModelForm):
     class Meta:
         model = Team

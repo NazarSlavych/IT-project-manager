@@ -6,7 +6,15 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
-from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm, WorkerSearchForm, ProjectSearchForm, TeamForm
+from manager.forms import (
+    WorkerCreationForm,
+    WorkerUpdateForm,
+    TaskForm,
+    WorkerSearchForm,
+    ProjectSearchForm,
+    TeamForm,
+    TeamSearchForm
+)
 from manager.models import Task, Worker, Position, TaskType, Project, Team
 
 
@@ -112,7 +120,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     model = Project
 
     def get_queryset(self):
-        queryset = Project.objects.all()  # або інші фільтри за замовчуванням
+        queryset = Project.objects.all()
         name = self.request.GET.get("name")
         if name:
             queryset = queryset.filter(name__icontains=name)
@@ -154,6 +162,22 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class TeamListView(LoginRequiredMixin, generic.ListView):
     model = Team
+
+    def get_queryset(self):
+        queryset = Team.objects.all()
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TeamSearchForm(
+            initial={"name": name}
+        )
+        return context
+
 
 
 class TeamDetailView(LoginRequiredMixin, generic.DetailView):
