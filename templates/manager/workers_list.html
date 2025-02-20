@@ -19,6 +19,7 @@
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
+        <th>Team</th>
       </tr>
       {% for worker in workers_list %}
         <tr>
@@ -27,6 +28,13 @@
           <td>{{ worker.username }}</td>
           <td>{{ worker.first_name }}</td>
           <td>{{ worker.last_name }}</td>
+          <td>
+            {% for team in worker.teams.all %}
+              {{ team.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              No team
+            {% endfor %}
+          </td>
         </tr>
       {% endfor %}
     </table>

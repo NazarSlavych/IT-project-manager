@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% block content %}
+  <h1>
+  Projects list
+    <a href="{% url 'manager:project-create' %}" class="btn btn-primary link-to-page">
+        Create
+    </a>
+  </h1>
+  <form method="get" action="" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="search">
+  </form>
+  {% if project_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Team</th>
+        <th>Finished</th>
+      </tr>
+      {% for project in project_list %}
+        <tr>
+          <td><a href="{% url "manager:project-detail" pk=project.id %} ">{{ project.id }}</a></td>
+          <td>{{ project.name }}</td>
+          <td>{{ project.deadline }}</td>
+          <td>{{ project.team }}</td>
+          <td>{{ project.is_completed|yesno:"✅,❌" }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no projects at that moment.</p>
+  {% endif %}
+{% endblock %}

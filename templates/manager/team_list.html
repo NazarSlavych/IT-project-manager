@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% block content %}
+  <h1>
+  Teams list
+    <a href="{% url 'manager:team-create' %}" class="btn btn-primary link-to-page">
+        Create
+    </a>
+  </h1>
+  <form method="get" action="" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="search">
+  </form>
+  {% if team_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+      {% for team in team_list %}
+        <tr>
+          <td><a href="{% url "manager:team-detail" pk=team.id %} ">{{ team.id }}</a></td>
+          <td>{{ team.name }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no teams at that moment.</p>
+  {% endif %}
+{% endblock %}

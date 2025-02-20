@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from manager.models import Worker, Position, TaskType, Task
+from manager.models import Worker, Position, TaskType, Task, Team, Project
 
 
 @admin.register(Worker)
@@ -18,9 +18,14 @@ class WorkerAdmin(UserAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("name", "deadline", "priority", "task_type",)
+    list_display = ("name", "deadline", "priority", "task_type", "project")
     list_filter = ("task_type",)
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ("name", "team")
 
 
 admin.site.register(Position)
 admin.site.register(TaskType)
+admin.site.register(Team)

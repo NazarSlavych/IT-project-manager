@@ -34,6 +34,31 @@ class TaskType(models.Model):
         return self.name
 
 
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(Worker, related_name="teams")
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("manager:team-detail", kwargs={"pk": self.pk})
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    deadline = models.DateField()
+    is_completed = models.BooleanField(default=False)
+    team  = models.ForeignKey(Team, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("manager:project-detail", kwargs={"pk": self.pk})
+
+
 class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -42,6 +67,7 @@ class Task(models.Model):
     priority = models.IntegerField(default=0)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(Worker, related_name="workers")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -4,12 +4,16 @@
   <h1>
     {{ task.name }}
     <a href="{% url 'manager:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">
-      Update worker
+      Update
     </a>
     <a href="{% url 'manager:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
   </h1>
+
+  {% if task.project %}
+  	<p><strong>Project:</strong> {{ task.project }}</p>
+  {% endif %}
   
   <p><strong>Description:</strong> {{ task.description }} </p>
   <p><strong>Deadline:</strong> {{ task.deadline }} </p>
@@ -26,5 +30,17 @@
       {% endfor %}     
     </ul>
   </div>
+  
+{% if request.user in task.project.team.members.all %}  
+  <form method="post" action="{% url 'manager:toggle-task' pk=task.id %}">
+      {% csrf_token %}
+      {% if request.user in task.assignees.all %}
+          <button type="submit" class="btn btn-danger">Leave Task</button>
+      {% else %}
+          <button type="submit" class="btn btn-success">Take Task</button>
+      {% endif %}
+  </form>
+{% endif %}
+
   
 {% endblock %}
