@@ -17,6 +17,7 @@
   <p><strong>Position:</strong> {{ worker.position }} </p>
   <p><strong>Email:</strong> {{ worker.email }} </p>
   
+
   <hr>
   <div>
     <h4>Tasks:</h4>
@@ -24,29 +25,29 @@
     {% if worker.workers.all %}
         <h5>Incomplete Tasks:</h5>
         <ul>
-          {% for task in worker.workers.all %}
-            {% if not task.is_completed %}
-              <li>
-                <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - {{ task.name }}
-              </li>
-            {% endif %}
-          {% endfor %}
+            {% for task in worker.workers.all %}
+                {% if not task.is_completed %}
+                    <li>
+                        <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - {{ task.name }}
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ul>
 
         <h5>Completed Tasks:</h5>
         <ul>
-          {% for task in worker.workers.all %}
-            {% if task.is_completed %}
-              <li>
-                <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - <s>{{ task.name }}</s>
-              </li>
-            {% endif %}
-          {% endfor %}
+            {% for task in worker.workers.all %}
+                {% if task.is_completed %}
+                    <li>
+                        <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - <s>{{ task.name }}</s>
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ul>
     {% else %}
         <p>No tasks assigned to this worker.</p>
     {% endif %}
 </div>
 
-  
+
 {% endblock %}

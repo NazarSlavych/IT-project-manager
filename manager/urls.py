@@ -21,7 +21,7 @@ from .views import (
     TeamListView,
     TeamDetailView,
     TeamUpdateView,
-    TeamDeleteView,
+    TeamDeleteView, toggle_assign_to_task, TeamCreateView,
 )
 
 urlpatterns = [
@@ -42,11 +42,12 @@ urlpatterns = [
     path("projects/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"),
     path("teams/", TeamListView.as_view(), name="teams"),
     path("teams/<int:pk>", TeamDetailView.as_view(), name="team-detail"),
-    path("teams/create/", ProjectCreateView.as_view(), name="team-create"),
+    path("teams/create/", TeamCreateView.as_view(), name="team-create"),
     path("teams/<int:pk>/update/", TeamUpdateView.as_view(), name="team-update"),
     path("teams/<int:pk>/delete/", TeamDeleteView.as_view(), name="team-delete"),
     path("positions", PositionsListView.as_view(), name="positions"),
     path("tasktype", TaskTypeListView.as_view(), name="task-type"),
+    path("task/<int:pk>/toggle/", toggle_assign_to_task, name="toggle-task"),
 ]
 
 

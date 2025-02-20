@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
-from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm, WorkerSearchForm, ProjectSearchForm
+from manager.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm, WorkerSearchForm, ProjectSearchForm, TeamForm
 from manager.models import Task, Worker, Position, TaskType, Project, Team
 
 
@@ -166,14 +167,24 @@ class TeamDetailView(LoginRequiredMixin, generic.DetailView):
 
 class TeamCreateView(LoginRequiredMixin, generic.CreateView):
     model = Team
-    fields = "__all__"
+    form_class = TeamForm
 
 
 class TeamUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Team
-    fields = "__all__"
+    form_class = TeamForm
 
 
 class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Team
     success_url = reverse_lazy("manager:teams")
+
+
+@login_required
+def toggle_assign_to_task(request, pk):
+    task = get_object_or_404(Task, id=pk)
+    if request.user in task.assignees.all():
+        task.assignees.remove(request.user)
+    else:
+        task.assignees.add(request.user)
+    return HttpResponseRedirect(reverse_lazy("manager:task-detail", args=[pk]))

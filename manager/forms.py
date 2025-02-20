@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from manager.models import Worker, Task
+from manager.models import Worker, Task, Team
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -62,3 +62,11 @@ class ProjectSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
     )
+
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = "__all__"
+        widgets = {
+            "members": forms.CheckboxSelectMultiple(),
+        }

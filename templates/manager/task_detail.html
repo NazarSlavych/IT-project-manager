@@ -31,4 +31,16 @@
     </ul>
   </div>
   
+{% if request.user in task.project.team.members.all %}  
+  <form method="post" action="{% url 'manager:toggle-task' pk=task.id %}">
+      {% csrf_token %}
+      {% if request.user in task.assignees.all %}
+          <button type="submit" class="btn btn-danger">Leave Task</button>
+      {% else %}
+          <button type="submit" class="btn btn-success">Take Task</button>
+      {% endif %}
+  </form>
+{% endif %}
+
+  
 {% endblock %}
