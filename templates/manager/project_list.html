@@ -18,6 +18,7 @@
         <th>Name</th>
         <th>Deadline</th>
         <th>Team</th>
+        <th>Finished</th>
       </tr>
       {% for project in project_list %}
         <tr>
@@ -25,10 +26,11 @@
           <td>{{ project.name }}</td>
           <td>{{ project.deadline }}</td>
           <td>{{ project.team }}</td>
+          <td>{{ project.is_completed|yesno:"✅,❌" }}</td>
         </tr>
       {% endfor %}
     </table>
   {% else %}
-    <p>There are no workers at that moment.</p>
+    <p>There are no projects at that moment.</p>
   {% endif %}
 {% endblock %}
