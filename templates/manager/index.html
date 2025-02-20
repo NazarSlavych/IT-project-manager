@@ -1,27 +1,35 @@
 {% extends "base.html" %}
+
 {% block content %}
-  <h1>Home page</h1>
-  <p>Welcome {{ user.get_username }}!</p>
-  <h3>Your Tasks</h3>
+<div class="container mt-4">
+  <h1 class="mb-3">Home Page</h1>
+  <p class="lead">Welcome, <strong>{{ user.get_username }}</strong>!</p>
+  
+  <h3 class="mt-4">Your Tasks</h3>
   {% if user.workers.all %}
-    <ul>
+    <ul class="list-group">
       {% for task in user.workers.all %}
-        <li>
-          <a href="/tasks/{{ task.id }}">{{ task.name }}</a> - {{ task.description }} (Deadline: {{ task.deadline }})
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <a href="/tasks/{{ task.id }}" class="fw-bold">{{ task.name }}</a>
+            <p class="mb-1 text-muted">{{ task.description }}</p>
+            <small class="text-danger">Deadline: {{ task.deadline }}</small>
+          </div>
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>You have no tasks assigned.</p>
+    <p class="text-muted">You have no tasks assigned.</p>
   {% endif %}
 
-  <h3>Dynamic content</h3>
-  <p>At this moment we have:</p>
-  <ul>
-    <li><strong>Task</strong> {{ num_task }} </li>
-    <li><strong>Workers</strong> {{ num_worker }} </li>
-    <li><strong>Free workers</strong> {{ num_free_workers }} </li>
-    <li><strong>Projects</strong> {{ num_project }}</li>
-    <li><strong>Teams</strong> {{ num_teams }}</li>
+  <h3 class="mt-5">Dynamic Content</h3>
+  <p class="mb-2">At this moment we have:</p>
+  <ul class="list-group">
+    <li class="list-group-item"><strong>Tasks:</strong> {{ num_task }}</li>
+    <li class="list-group-item"><strong>Workers:</strong> {{ num_worker }}</li>
+    <li class="list-group-item"><strong>Free workers:</strong> {{ num_free_workers }}</li>
+    <li class="list-group-item"><strong>Projects:</strong> {{ num_project }}</li>
+    <li class="list-group-item"><strong>Teams:</strong> {{ num_teams }}</li>
   </ul>
+</div>
 {% endblock %}
