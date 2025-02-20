@@ -25,16 +25,28 @@ class WorkerUpdateForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = ["name", "description", "deadline", "is_completed","priority", "task_type", "assignees"]
         widgets = {
             "assignees": forms.CheckboxSelectMultiple(),
         }
+
+    def __init__(self, *args, **kwargs):
+        project = kwargs.pop("project", None)
+        super().__init__(*args, **kwargs)
+
+        if self.instance.pk:
+            project = self.instance.project
+
+        if project:
+            self.fields["assignees"].queryset = project.team.members.all()
 
     def clean_deadline(self):
         deadline = self.cleaned_data["deadline"]
         if deadline < datetime.date.today():
             raise forms.ValidationError("Deadline must be in the future")
         return deadline
+
+
 
 
 class TaskSearchForm(forms.Form):
