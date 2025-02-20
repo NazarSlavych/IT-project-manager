@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     index,
-    TaskListView,
     WorkersListView,
     TaskDetailView,
     WorkerDetailView,
