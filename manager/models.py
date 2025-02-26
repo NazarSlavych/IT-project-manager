@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -48,7 +50,7 @@ class Team(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    deadline = models.DateField()
+    deadline = models.DateField(default=datetime.date.today)
     is_completed = models.BooleanField(default=False)
     team  = models.ForeignKey(Team, on_delete=models.CASCADE)
 
@@ -62,7 +64,7 @@ class Project(models.Model):
 class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    deadline = models.DateField()
+    deadline = models.DateField(default=datetime.date.today)
     is_completed = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
