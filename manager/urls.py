@@ -21,7 +21,7 @@ from .views import (
     TeamListView,
     TeamDetailView,
     TeamUpdateView,
-    TeamDeleteView, toggle_assign_to_task, TeamCreateView,
+    TeamDeleteView, toggle_assign_to_task, TeamCreateView, login_view,
 )
 
 urlpatterns = [
@@ -48,6 +48,7 @@ urlpatterns = [
     path("positions", PositionsListView.as_view(), name="positions"),
     path("tasktype", TaskTypeListView.as_view(), name="task-type"),
     path("task/<int:pk>/toggle/", toggle_assign_to_task, name="toggle-task"),
+    path("accounts/login/", login_view, name="login"),
 ]
 
 
