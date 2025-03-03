@@ -1,38 +1,62 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 
 {% block content %}
-  <h1>
-    {{ team.name }}
-    <a href="{% url 'manager:team-update' pk=team.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-    <a href="{% url 'manager:team-delete' pk=team.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-  </h1>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      {% include "includes/sidebar.html" %}
+      <!-- Main content -->
+      <main class="col-md-9 col-lg-10 px-md-4">
+        <header class="header-2">
+          <div class="page-header section-height-25 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved.jpg')">
+            <div class="container d-flex justify-content-between align-items-center">
+              <h1 class="text-white pt-3 mt-n5">{{ team.name }}</h1>
+              <div>
+                <a href="{% url 'manager:team-update' pk=team.id %}" class="btn btn-secondary">Update</a>
+                <a href="{% url 'manager:team-delete' pk=team.id %}" class="btn btn-danger">Delete</a>
+              </div>
+            </div>
+          </div>
+        </header>
 
-  <hr>
-  <div>
-    <h4>Workers</h4>
-    <ul>
-      {% for worker in team.members.all %}
-        <li>
-          <a href="{% url 'manager:worker-detail' pk=worker.id %}">{{ worker.id }}</a>
-          {{ worker.first_name }} {{ worker.last_name }}
-        </li>
-      {% endfor %}     
-    </ul>
+        <section class="pt-5 pb-4">
+          <div class="container">
+            <div class="card shadow-lg">
+              <div class="card-body">
+                <h4 class="card-title">Workers</h4>
+                {% if team.members.all %}
+                  <ul class="list-group">
+                    {% for worker in team.members.all %}
+                      <li class="list-group-item">
+                        <a href="{% url 'manager:worker-detail' pk=worker.id %}">{{ worker.id }}</a> - {{ worker.first_name }} {{ worker.last_name }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="text-center text-muted">No workers in this team.</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="card shadow-lg mt-4">
+              <div class="card-body">
+                <h4 class="card-title">Projects</h4>
+                {% if projects %}
+                  <ul class="list-group">
+                    {% for project in projects %}
+                      <li class="list-group-item">
+                        <a href="{% url 'manager:project-detail' pk=project.id %}">{{ project.id }}</a> - {{ project.name }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="text-center text-muted">This team has no projects.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
-
-  <hr>
-
-  <h4>Projects:</h4>
-  <ul>
-    {% for project in projects %}
-      <li><a href="{% url 'manager:project-detail' pk=project.id %}">{{ project.id }}</a> - {{ project.name }}</li>
-    {% empty %}
-      <li>Ця команда не має проєктів.</li>
-    {% endfor %}
-  </ul>
-
 {% endblock %}

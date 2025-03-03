@@ -1,21 +1,28 @@
-<ul class="sidebar-nav list-group">
-  {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item">
-      <form method="post" action="{% url 'logout' %}" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-link p-0" >Logout</button>
-      </form>
-    </li>
-  {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-  {% endif %}
+<nav class="sidebar col-md-2 col-lg-2 bg-white shadow-sm p-3">
+  <ul class="sidebar-nav list-group">
+    {% if user.is_authenticated %}
+      <li class="list-group-item border-0">
+        <strong>User:</strong> <a href="{{ user.get_absolute_url }}" class="ms-1">{{ user.get_username }}</a>
+      </li>
+      <li class="list-group-item border-0">
+        <form method="post" action="{% url 'logout' %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-link p-0 text-danger">Logout</button>
+        </form>
+      </li>
+    {% else %}
+      <li class="list-group-item border-0">
+        <a href="{% url 'login'%}?next={{request.path}}" class="text-decoration-none">Login</a>
+      </li>
+    {% endif %}
 
-  <br>
-  <li class="list-group-item"><a href="{% url 'manager:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'manager:workers' %}">Workers</a></li>
-  <li class="list-group-item"><a href="{% url 'manager:projects' %}">Projects</a></li>
-  <li class="list-group-item"><a href="{% url 'manager:teams' %}">Teams</a></li>
-  <li class="list-group-item"><a href="{% url 'manager:positions' %}">Positions</a></li>
-  <li class="list-group-item"><a href="{% url 'manager:task-type' %}">Task types</a></li>
-</ul>
+    <hr>
+
+    <li class="list-group-item border-0"><a href="{% url 'manager:index' %}" class="text-decoration-none">Home</a></li>
+    <li class="list-group-item border-0"><a href="{% url 'manager:workers' %}" class="text-decoration-none">Workers</a></li>
+    <li class="list-group-item border-0"><a href="{% url 'manager:projects' %}" class="text-decoration-none">Projects</a></li>
+    <li class="list-group-item border-0"><a href="{% url 'manager:teams' %}" class="text-decoration-none">Teams</a></li>
+    <li class="list-group-item border-0"><a href="{% url 'manager:positions' %}" class="text-decoration-none">Positions</a></li>
+    <li class="list-group-item border-0"><a href="{% url 'manager:task-type' %}" class="text-decoration-none">Task types</a></li>
+  </ul>
+</nav>

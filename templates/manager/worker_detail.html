@@ -1,53 +1,69 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 
 {% block content %}
-  <h1>
-    {{ worker.username }}
-    <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-    <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page">
-      Update worker
-    </a>
-  </h1>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      {% include "includes/sidebar.html" %}
+      <!-- Main content -->
+      <main class="col-md-9 col-lg-10 px-md-4">
+        <header class="header-2">
+          <div class="page-header section-height-25 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved.jpg')">
+            <div class="container d-flex justify-content-between align-items-center">
+              <h1 class="text-white pt-3 mt-n5">{{ worker.username }}</h1>
+              <div>
+                <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary">Update worker</a>
+                <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger">Delete</a>
+              </div>
+            </div>
+          </div>
+        </header>
 
-  <hr>
-  <p><strong>First name:</strong> {{ worker.first_name }} </p>
-  <p><strong>Last name:</strong> {{ worker.last_name }} </p>
-  <p><strong>Position:</strong> {{ worker.position }} </p>
-  <p><strong>Email:</strong> {{ worker.email }} </p>
-  
+        <section class="pt-5 pb-4">
+          <div class="container">
+            <div class="card shadow-lg">
+              <div class="card-body">
+                <h4 class="card-title">Worker Details</h4>
+                <p><strong>First name:</strong> {{ worker.first_name }}</p>
+                <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+                <p><strong>Position:</strong> {{ worker.position }}</p>
+                <p><strong>Email:</strong> {{ worker.email }}</p>
+              </div>
+            </div>
 
-  <hr>
-  <div>
-    <h4>Tasks:</h4>
+            <div class="card shadow-lg mt-4">
+              <div class="card-body">
+                <h4 class="card-title">Tasks</h4>
+                {% if worker.workers.all %}
+                  <h5>Incomplete Tasks:</h5>
+                  <ul class="list-group mb-3">
+                    {% for task in worker.workers.all %}
+                      {% if not task.is_completed %}
+                        <li class="list-group-item">
+                          <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - {{ task.name }}
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
 
-    {% if worker.workers.all %}
-        <h5>Incomplete Tasks:</h5>
-        <ul>
-            {% for task in worker.workers.all %}
-                {% if not task.is_completed %}
-                    <li>
-                        <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - {{ task.name }}
-                    </li>
+                  <h5>Completed Tasks:</h5>
+                  <ul class="list-group">
+                    {% for task in worker.workers.all %}
+                      {% if task.is_completed %}
+                        <li class="list-group-item text-muted">
+                          <a href="{% url 'manager:task-detail' pk=task.id %}"><s>{{ task.id }}</s></a> - <s>{{ task.name }}</s>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="text-center text-muted">No tasks assigned to this worker.</p>
                 {% endif %}
-            {% endfor %}
-        </ul>
-
-        <h5>Completed Tasks:</h5>
-        <ul>
-            {% for task in worker.workers.all %}
-                {% if task.is_completed %}
-                    <li>
-                        <a href="{% url 'manager:task-detail' pk=task.id %}">{{ task.id }}</a> - <s>{{ task.name }}</s>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tasks assigned to this worker.</p>
-    {% endif %}
-</div>
-
-
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
 {% endblock %}

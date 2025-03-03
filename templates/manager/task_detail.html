@@ -1,46 +1,65 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 
 {% block content %}
-  <h1>
-    {{ task.name }}
-    <a href="{% url 'manager:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-    <a href="{% url 'manager:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-  </h1>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      {% include "includes/sidebar.html" %}
+      <!-- Main content -->
+      <main class="col-md-9 col-lg-10 px-md-4">
+        <section class="pt-5 pb-4">
+          <div class="container">
+            <div class="card shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h1 class="text-dark fw-bold">{{ task.name }}</h1>
+                  <div>
+                    <a href="{% url 'manager:task-update' pk=task.id %}" class="btn btn-outline-secondary">Update</a>
+                    <a href="{% url 'manager:task-delete' pk=task.id %}" class="btn btn-outline-danger">Delete</a>
+                  </div>
+                </div>
 
-  {% if task.project %}
-  	<p><strong>Project:</strong> {{ task.project }}</p>
-  {% endif %}
-  
-  <p><strong>Description:</strong> {{ task.description }} </p>
-  <p><strong>Deadline:</strong> {{ task.deadline }} </p>
-  <p><strong>Is completed:</strong> {{ task.is_completed }} </p>
-  <p><strong>Priority:</strong> {{ task.priority }} </p>
-  <p><strong>Task type:</strong> {{ task.task_type }} </p>
+                <hr>
+                
+                {% if task.project %}
+                  <p><strong>Project:</strong> {{ task.project }}</p>
+                {% endif %}
 
-  <hr>
-  <div>
-    <h4>Workers</h4>
-    <ul>
-      {% for worker in task.assignees.all %}
-        <li>{{ worker.id }} {{ worker.first_name }} {{ worker.last_name }}</li>
-      {% endfor %}     
-    </ul>
+                <p><strong>Description:</strong> {{ task.description }}</p>
+                <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+                <p><strong>Is completed:</strong> {{ task.is_completed|yesno:"✅,❌" }}</p>
+                <p><strong>Priority:</strong> {{ task.priority }}</p>
+                <p><strong>Task type:</strong> {{ task.task_type }}</p>
+
+                <hr>
+                <div>
+                  <h4>Workers</h4>
+                  {% if task.assignees.all %}
+                    <ul>
+                      {% for worker in task.assignees.all %}
+                        <li>{{ worker.first_name }} {{ worker.last_name }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <p class="text-muted">No workers assigned to this task.</p>
+                  {% endif %}
+                </div>
+
+                {% if request.user in task.project.team.members.all %}
+                  <form method="post" action="{% url 'manager:toggle-task' pk=task.id %}">
+                    {% csrf_token %}
+                    {% if request.user in task.assignees.all %}
+                      <button type="submit" class="btn btn-outline-danger">Leave Task</button>
+                    {% else %}
+                      <button type="submit" class="btn btn-outline-success">Take Task</button>
+                    {% endif %}
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
-  
-{% if request.user in task.project.team.members.all %}  
-  <form method="post" action="{% url 'manager:toggle-task' pk=task.id %}">
-      {% csrf_token %}
-      {% if request.user in task.assignees.all %}
-          <button type="submit" class="btn btn-danger">Leave Task</button>
-      {% else %}
-          <button type="submit" class="btn btn-success">Take Task</button>
-      {% endif %}
-  </form>
-{% endif %}
-
-  
 {% endblock %}
