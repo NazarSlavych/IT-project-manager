@@ -1,8 +1,9 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -13,7 +14,7 @@ from manager.forms import (
     WorkerSearchForm,
     ProjectSearchForm,
     TeamForm,
-    TeamSearchForm
+    TeamSearchForm, LoginForm
 )
 from manager.models import Task, Worker, Position, TaskType, Project, Team
 
@@ -33,6 +34,28 @@ def index(request):
         "num_teams": num_teams,
     }
     return render(request, "manager/index.html", context)
+
+
+def login_view(request):
+    form = LoginForm(request.POST or None)
+
+    msg = None
+
+    if request.method == "POST":
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("/")
+            else:
+                msg = 'Invalid credentials'
+        else:
+            msg = 'Error validating the form'
+
+    return render(request, "registration/login.html", {"form": form, "msg": msg})
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):

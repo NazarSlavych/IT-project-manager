@@ -1,44 +1,70 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 {% load crispy_forms_filters %}
+
 {% block content %}
-  <h1>
-  Workers list
-    <a href="{% url 'manager:worker-create' %}" class="btn btn-primary link-to-page">
-        Create
-    </a>
-  </h1>
-  <form method="get" action="" class="form-inline">
-    {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="search">
-  </form>
-  {% if workers_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Position</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Team</th>
-      </tr>
-      {% for worker in workers_list %}
-        <tr>
-          <td><a href="{% url "manager:worker-detail" pk=worker.id %} ">{{ worker.id }}</a></td>
-          <td>{{ worker.position }}</td>
-          <td>{{ worker.username }}</td>
-          <td>{{ worker.first_name }}</td>
-          <td>{{ worker.last_name }}</td>
-          <td>
-            {% for team in worker.teams.all %}
-              {{ team.name }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-              No team
-            {% endfor %}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <p>There are no workers at that moment.</p>
-  {% endif %}
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      {% include "includes/sidebar.html" %}
+      <!-- Main content -->
+      <main class="col-md-9 col-lg-10 px-md-4">
+        <header class="header-2">
+          <div class="page-header section-height-25 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved.jpg')">
+            <div class="container d-flex justify-content-between align-items-center">
+              <h1 class="text-white pt-3 mt-n5">Workers List</h1>
+              <a href="{% url 'manager:worker-create' %}" class="btn btn-primary">Create</a>
+            </div>
+          </div>
+        </header>
+
+        <section class="pt-5 pb-4">
+          <div class="container">
+            <form method="get" action="" class="form-inline mb-4">
+              {{ search_form|crispy }}
+              <input class="btn btn-secondary" type="submit" value="Search">
+            </form>
+
+            {% if workers_list %}
+              <div class="card shadow-lg">
+                <div class="card-body">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Position</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Team</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for worker in workers_list %}
+                        <tr>
+                          <td><a href="{% url 'manager:worker-detail' pk=worker.id %}">{{ worker.id }}</a></td>
+                          <td>{{ worker.position }}</td>
+                          <td>{{ worker.username }}</td>
+                          <td>{{ worker.first_name }}</td>
+                          <td>{{ worker.last_name }}</td>
+                          <td>
+                            {% for team in worker.teams.all %}
+                              {{ team.name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                              No team
+                            {% endfor %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            {% else %}
+              <p class="text-center text-muted">There are no workers at that moment.</p>
+            {% endif %}
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
 {% endblock %}
