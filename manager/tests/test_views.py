@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from manager.models import Task, Worker, Position, Project, Team, TaskType
+from manager.models import Task, Position, Project, Team, TaskType
 
 User = get_user_model()
 
