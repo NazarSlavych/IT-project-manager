@@ -14,7 +14,8 @@ from manager.forms import (
     WorkerSearchForm,
     ProjectSearchForm,
     TeamForm,
-    TeamSearchForm, LoginForm
+    TeamSearchForm,
+    LoginForm,
 )
 from manager.models import Task, Worker, Position, TaskType, Project, Team
 
@@ -23,7 +24,11 @@ from manager.models import Task, Worker, Position, TaskType, Project, Team
 def index(request):
     num_task = Task.objects.count()
     num_worker = Worker.objects.count()
-    num_free_workers = Worker.objects.annotate(task_count=Count("workers")).filter(task_count=0).count()
+    num_free_workers = (
+        Worker.objects.annotate(task_count=Count("workers"))
+        .filter(task_count=0)
+        .count()
+    )
     num_project = Project.objects.count()
     num_teams = Team.objects.count()
     context = {
@@ -51,9 +56,9 @@ def login_view(request):
                 login(request, user)
                 return redirect("/")
             else:
-                msg = 'Invalid credentials'
+                msg = "Invalid credentials"
         else:
-            msg = 'Error validating the form'
+            msg = "Error validating the form"
 
     return render(request, "registration/login.html", {"form": form, "msg": msg})
 
@@ -73,7 +78,9 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
         return kwargs
 
     def form_valid(self, form):
-        form.instance.project = get_object_or_404(Project, pk=self.kwargs.get("project_id"))
+        form.instance.project = get_object_or_404(
+            Project, pk=self.kwargs.get("project_id")
+        )
         return super().form_valid(form)
 
 
@@ -103,11 +110,8 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["search_form"] = WorkerSearchForm(
-            initial={"username": username}
-        )
+        context["search_form"] = WorkerSearchForm(initial={"username": username})
         return context
-
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
@@ -152,11 +156,8 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ProjectSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ProjectSearchForm(initial={"name": name})
         return context
-
 
 
 class ProjectDetailView(LoginRequiredMixin, generic.DetailView):
@@ -196,11 +197,8 @@ class TeamListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = TeamSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = TeamSearchForm(initial={"name": name})
         return context
-
 
 
 class TeamDetailView(LoginRequiredMixin, generic.DetailView):

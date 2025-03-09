@@ -19,7 +19,7 @@ class WorkerModelTest(TestCase):
             password="password123",
             first_name="John",
             last_name="Doe",
-            position=self.position
+            position=self.position,
         )
 
     def test_create_worker(self):
@@ -30,7 +30,7 @@ class WorkerModelTest(TestCase):
     def test_worker_str(self):
         self.assertEqual(
             str(self.worker),
-            f"{self.worker.username}: ({self.worker.first_name} {self.worker.last_name})"
+            f"{self.worker.username}: ({self.worker.first_name} {self.worker.last_name})",
         )
 
 
@@ -42,8 +42,12 @@ class TaskTypeModelTest(TestCase):
 
 class TeamModelTest(TestCase):
     def setUp(self):
-        self.worker1 = get_user_model().objects.create_user(username="worker1", password="testpass")
-        self.worker2 = get_user_model().objects.create_user(username="worker2", password="testpass")
+        self.worker1 = get_user_model().objects.create_user(
+            username="worker1", password="testpass"
+        )
+        self.worker2 = get_user_model().objects.create_user(
+            username="worker2", password="testpass"
+        )
 
     def test_create_team(self):
         team = Team.objects.create(name="Development Team")
@@ -63,7 +67,7 @@ class ProjectModelTest(TestCase):
             name="Website Redesign",
             description="Redesign the company website",
             deadline=datetime.date.today(),
-            team=self.team
+            team=self.team,
         )
 
     def test_create_project(self):
@@ -82,10 +86,14 @@ class TaskModelTest(TestCase):
             name="Landing Page",
             description="Create a landing page",
             deadline=datetime.date.today(),
-            team=self.team
+            team=self.team,
         )
-        self.worker1 = get_user_model().objects.create_user(username="worker1", password="testpass")
-        self.worker2 = get_user_model().objects.create_user(username="worker2", password="testpass")
+        self.worker1 = get_user_model().objects.create_user(
+            username="worker1", password="testpass"
+        )
+        self.worker2 = get_user_model().objects.create_user(
+            username="worker2", password="testpass"
+        )
 
     def test_create_task(self):
         task = Task.objects.create(
@@ -95,7 +103,7 @@ class TaskModelTest(TestCase):
             is_completed=False,
             priority=1,
             task_type=self.task_type,
-            project=self.project
+            project=self.project,
         )
         task.assignees.set([self.worker1, self.worker2])
 

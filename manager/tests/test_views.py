@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from manager.models import Task, Worker, Position, Project, Team, TaskType
+from manager.models import Task, Position, Project, Team, TaskType
 
 User = get_user_model()
 
@@ -9,16 +9,24 @@ User = get_user_model()
 class ViewsTestCase(TestCase):
     def setUp(self):
         self.position = Position.objects.create(name="Developer")
-        self.user = User.objects.create_user(username="testuser", password="testpass", position=self.position)
+        self.user = User.objects.create_user(
+            username="testuser", password="testpass", position=self.position
+        )
         self.client.login(username="testuser", password="testpass")
 
         self.team = Team.objects.create(name="Test Team")
         self.team.members.add(self.user)
 
-        self.project = Project.objects.create(name="Test Project", description="Project Description", team=self.team)
+        self.project = Project.objects.create(
+            name="Test Project", description="Project Description", team=self.team
+        )
         self.task_type = TaskType.objects.create(name="Bug Fix")
-        self.task = Task.objects.create(name="Test Task", description="Task Description", project=self.project,
-                                        task_type=self.task_type)
+        self.task = Task.objects.create(
+            name="Test Task",
+            description="Task Description",
+            project=self.project,
+            task_type=self.task_type,
+        )
         self.task.assignees.add(self.user)
 
     def test_index_view(self):
@@ -53,12 +61,15 @@ class ViewsTestCase(TestCase):
         self.assertContains(response, self.project.name)
 
     def test_project_create_view(self):
-        response = self.client.post(reverse("manager:project-create"), {
-            "name": "New Project",
-            "description": "New Description",
-            "deadline": "2025-12-31",
-            "is_completed": False,
-            "team": self.team.pk
-        })
+        response = self.client.post(
+            reverse("manager:project-create"),
+            {
+                "name": "New Project",
+                "description": "New Description",
+                "deadline": "2025-12-31",
+                "is_completed": False,
+                "team": self.team.pk,
+            },
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Project.objects.filter(name="New Project").exists())
