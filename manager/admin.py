@@ -13,13 +13,16 @@ class WorkerAdmin(UserAdmin):
         (("Additional info", {"fields": ("position",)}),)
     )
 
-    add_fieldsets = UserAdmin.add_fieldsets + (("Additional info", {"fields": ("position",)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ("Additional info", {"fields": ("position",)}),
+    )
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ("name", "deadline", "priority", "task_type", "project")
     list_filter = ("task_type",)
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):

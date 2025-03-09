@@ -19,18 +19,14 @@ class WorkerCreationForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Username",
-                "class": "form-control"
-            }
-        ))
+            attrs={"placeholder": "Username", "class": "form-control"}
+        )
+    )
     password = forms.CharField(
         widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Password",
-                "class": "form-control"
-            }
-        ))
+            attrs={"placeholder": "Password", "class": "form-control"}
+        )
+    )
 
 
 class WorkerUpdateForm(forms.ModelForm):
@@ -42,7 +38,15 @@ class WorkerUpdateForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ["name", "description", "deadline", "is_completed","priority", "task_type", "assignees"]
+        fields = [
+            "name",
+            "description",
+            "deadline",
+            "is_completed",
+            "priority",
+            "task_type",
+            "assignees",
+        ]
         widgets = {
             "assignees": forms.CheckboxSelectMultiple(),
         }
@@ -69,15 +73,16 @@ class WorkerSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by username.."})
+        widget=forms.TextInput(attrs={"placeholder": "Search by username.."}),
     )
+
 
 class ProjectSearchForm(forms.Form):
     name = forms.CharField(
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
+        widget=forms.TextInput(attrs={"placeholder": "Search by name.."}),
     )
 
 
@@ -86,7 +91,7 @@ class TeamSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by name.."})
+        widget=forms.TextInput(attrs={"placeholder": "Search by name.."}),
     )
 
 

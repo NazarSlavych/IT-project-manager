@@ -11,13 +11,14 @@ class Position(models.Model):
     class Meta:
         ordering = ["name"]
 
-
     def __str__(self):
         return self.name
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
+    position = models.ForeignKey(
+        Position, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.username}: ({self.first_name} {self.last_name})"
@@ -52,7 +53,7 @@ class Project(models.Model):
     description = models.TextField()
     deadline = models.DateField(default=datetime.date.today)
     is_completed = models.BooleanField(default=False)
-    team  = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -69,7 +70,9 @@ class Task(models.Model):
     priority = models.IntegerField(default=0)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(Worker, related_name="workers")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
