@@ -2,6 +2,13 @@
 
 Simple project for managing tasks in IT teams. Team members can create, assign, and track tasks to stay on schedule.
 
+## Check it out!
+
+[Project manager deployed to Render](https://it-project-manager.onrender.com)
+
+* login - admin12
+* password - 1212
+
 ## Installing
 
 Python3 must be installed
