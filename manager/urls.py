@@ -1,7 +1,7 @@
 from django.urls import path
 
 from manager.views import (
-    index,
+    IndexView,
     WorkersListView,
     TaskDetailView,
     WorkerDetailView,
@@ -22,13 +22,13 @@ from manager.views import (
     TeamDetailView,
     TeamUpdateView,
     TeamDeleteView,
-    toggle_assign_to_task,
+    ToggleAssignToTaskView,
     TeamCreateView,
-    login_view,
+    LoginView,
 )
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("tasks/<int:pk>", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
     path("tasks/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
@@ -58,8 +58,8 @@ urlpatterns = [
     path("teams/<int:pk>/delete/", TeamDeleteView.as_view(), name="team-delete"),
     path("positions", PositionsListView.as_view(), name="positions"),
     path("tasktype", TaskTypeListView.as_view(), name="task-type"),
-    path("task/<int:pk>/toggle/", toggle_assign_to_task, name="toggle-task"),
-    path("accounts/login/", login_view, name="login"),
+    path("task/<int:pk>/toggle/", ToggleAssignToTaskView.as_view(), name="toggle-task"),
+    path("accounts/login/", LoginView.as_view(), name="login"),
 ]
 
 

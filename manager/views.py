@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 
 from manager.forms import (
     WorkerCreationForm,
@@ -17,50 +18,41 @@ from manager.forms import (
     TeamSearchForm,
     LoginForm,
 )
-from manager.models import Task, Worker, Position, TaskType, Project, Team
+from manager.models import (
+    Task,
+    Worker,
+    Position,
+    TaskType,
+    Project,
+    Team
+)
 
 
-@login_required
-def index(request):
-    num_task = Task.objects.count()
-    num_worker = Worker.objects.count()
-    num_free_workers = (
-        Worker.objects.annotate(task_count=Count("workers"))
-        .filter(task_count=0)
-        .count()
-    )
-    num_project = Project.objects.count()
-    num_teams = Team.objects.count()
-    context = {
-        "num_task": num_task,
-        "num_worker": num_worker,
-        "num_free_workers": num_free_workers,
-        "num_project": num_project,
-        "num_teams": num_teams,
-    }
-    return render(request, "manager/index.html", context)
+class IndexView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "manager/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "num_task": Task.objects.count(),
+            "num_worker": Worker.objects.count(),
+            "num_free_workers": Worker.objects.annotate(task_count=Count("workers")).filter(task_count=0).count(),
+            "num_project": Project.objects.count(),
+            "num_teams": Team.objects.count(),
+        })
+        return context
 
 
-def login_view(request):
-    form = LoginForm(request.POST or None)
+class CustomLoginView(LoginView):
+    form_class = LoginForm
+    template_name = "registration/login.html"
 
-    msg = None
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form, msg="Error validating the form"))
 
-    if request.method == "POST":
-
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("/")
-            else:
-                msg = "Invalid credentials"
-        else:
-            msg = "Error validating the form"
-
-    return render(request, "registration/login.html", {"form": form, "msg": msg})
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -225,11 +217,11 @@ class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("manager:teams")
 
 
-@login_required
-def toggle_assign_to_task(request, pk):
-    task = get_object_or_404(Task, id=pk)
-    if request.user in task.assignees.all():
-        task.assignees.remove(request.user)
-    else:
-        task.assignees.add(request.user)
-    return HttpResponseRedirect(reverse_lazy("manager:task-detail", args=[pk]))
+class ToggleAssignToTaskView(LoginRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        task = get_object_or_404(Task, id=pk)
+        if request.user in task.assignees.all():
+            task.assignees.remove(request.user)
+        else:
+            task.assignees.add(request.user)
+        return HttpResponseRedirect(reverse_lazy("manager:task-detail", args=[pk]))
